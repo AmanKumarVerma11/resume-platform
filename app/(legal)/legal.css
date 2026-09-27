@@ -1,0 +1,58 @@
+body {
+  margin: 0;
+}
+
+.legal {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 16px 56px;
+  color: #151616;
+  font: 16px/1.6 system-ui, -apple-system, sans-serif;
+}
+
+.legal h1 {
+  margin: 0 0 4px;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.legal h2 {
+  margin: 28px 0 8px;
+  font-size: 18px;
+}
+
+.legal .updated {
+  margin: 0 0 24px;
+  color: #666;
+  font-size: 14px;
+}
+
+.legal a {
+  color: inherit;
+}
+
+.legal table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.legal th,
+.legal td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: left;
+  vertical-align: top;
+}
+
+.legal code {
+  font-size: 14px;
+}
+
+.legal footer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e5e5;
+  color: #666;
+  font-size: 14px;
+}

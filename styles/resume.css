@@ -1,0 +1,262 @@
+/* Shared by the web page and the PDF. Sizes mirror the original LaTeX (10pt, US Letter). */
+@page {
+  size: letter;
+  margin: 0;
+}
+
+.resume {
+  box-sizing: border-box;
+  width: 8.5in;
+  min-height: 11in;
+  margin: 0 auto;
+  padding: 0.35in 0.4in;
+  background: #fff;
+  color: #151616;
+  font-family: 'TeX Gyre Heros Cn', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 10pt;
+  line-height: 12pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.resume h1,
+.resume h2,
+.resume h3,
+.resume p,
+.resume ul {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.resume a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.resume strong {
+  font-weight: 700;
+}
+
+.r-name {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 22pt !important;
+  line-height: 25pt;
+}
+
+.r-label {
+  margin-top: 3pt !important;
+  text-align: center;
+  font-size: 10.5pt;
+}
+
+.r-contact {
+  margin: 4pt 0 6pt;
+  font-size: 10.5pt;
+}
+
+.r-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.r-row + .r-row {
+  margin-top: 1pt;
+}
+
+.r-summary,
+.r-bullets li,
+.r-para {
+  text-align: justify;
+}
+
+.r-bar {
+  margin-top: 5pt !important;
+  margin-bottom: 2pt !important;
+  padding: 3pt 7pt;
+  background: #d9d9da;
+  font-size: 13pt !important;
+  line-height: 15pt;
+}
+
+.r-role {
+  margin: 2.5pt 0 1pt 6pt !important;
+  font-weight: 700 !important;
+}
+
+.r-bullets {
+  margin: 1.5pt 0 !important;
+  padding-left: 0.3in;
+  list-style: none;
+}
+
+.r-bullets li {
+  position: relative;
+}
+
+.r-bullets li + li {
+  margin-top: 1pt;
+}
+
+.r-bullets li::before {
+  content: '•';
+  position: absolute;
+  right: calc(100% + 0.12in);
+}
+
+.r-cols {
+  display: flex;
+}
+
+.r-cols > span:nth-child(1) {
+  flex: none;
+  width: 2.8in;
+}
+
+.r-cols > span:nth-child(2) {
+  flex: none;
+  width: 1.6in;
+}
+
+.r-edu {
+  padding-left: 5pt;
+  margin-bottom: 1pt;
+}
+
+.r-para {
+  padding: 0 5pt;
+}
+
+/* Web page around the resume */
+body {
+  margin: 0;
+}
+
+.viewer {
+  min-height: 100vh;
+  padding: 24px 0 48px;
+  background: #e9e9ea;
+}
+
+.viewer .resume {
+  box-shadow: 0 1px 4px rgb(0 0 0 / 15%);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 8.5in;
+  margin: 0 auto 12px;
+  font: 14px/1.4 system-ui, sans-serif;
+}
+
+.toolbar .download {
+  flex: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: #151616;
+  color: #fff;
+  text-decoration: none;
+}
+
+.site-footer {
+  margin-top: 16px;
+  color: #666;
+  font: 12px/1.4 system-ui, sans-serif;
+  text-align: center;
+}
+
+.site-footer a {
+  color: inherit;
+}
+
+.cookie-notice {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  box-sizing: border-box;
+  padding: 10px 12px 10px 16px;
+  border-radius: 8px;
+  background: #151616;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 20%);
+  color: #fff;
+  font: 13px/1.4 system-ui, sans-serif;
+  transform: translateX(-50%);
+}
+
+.cookie-notice p {
+  margin: 0;
+}
+
+.cookie-notice a {
+  color: inherit;
+}
+
+.cookie-notice button {
+  flex: none;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: #fff;
+  color: #151616;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media print {
+  .toolbar,
+  .site-footer,
+  .cookie-notice {
+    display: none;
+  }
+
+  .viewer {
+    padding: 0;
+    background: none;
+  }
+
+  .viewer .resume {
+    box-shadow: none;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .viewer {
+    padding: 0;
+  }
+
+  .toolbar {
+    width: auto;
+    margin: 0;
+    padding: 12px 16px;
+  }
+
+  .resume {
+    width: auto;
+    min-height: 0;
+    padding: 16px;
+  }
+
+  .r-row,
+  .r-cols {
+    flex-wrap: wrap;
+    column-gap: 12px;
+  }
+
+  .r-cols > span:nth-child(n) {
+    width: auto;
+  }
+
+  .r-summary,
+  .r-bullets li,
+  .r-para {
+    text-align: left;
+  }
+}

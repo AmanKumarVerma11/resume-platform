@@ -1,0 +1,79 @@
+{
+  "basics": {
+    "name": "Aman Kumar Verma",
+    "label": "Front-End & Full-Stack Software Engineer | React, Next.js, TypeScript | REST API Integration, UI Performance & Web Security",
+    "email": "akverma11aug2002@gmail.com",
+    "phone": "+91-9599762322",
+    "url": "https://www.amankrverma.in/",
+    "summary": "Software engineer with 1.5 years of hands-on experience building and shipping customer-facing web applications end to end with **React**, **Next.js**, and **TypeScript**. Strong on the front end: turning product requirements and UX designs into performant, responsive, reusable UI components, wiring them to backend services over **REST APIs**, and optimizing for speed by cutting redundant re-renders, batching and caching requests, and tuning Core Web Vitals. Comfortable across the full stack when a feature needs it, with Node.js, Express, and **PostgreSQL**, and security-aware from building a high-risk payments platform (per-merchant keys, row-level security). Also hands-on with Generative AI (LLM integration, RAG, and multi-agent orchestration), a practical edge on modern product teams.",
+    "profiles": [
+      { "network": "LinkedIn", "url": "https://www.linkedin.com/in/aman-kr-verma11/" },
+      { "network": "GitHub", "url": "https://github.com/AmanKumarVerma11" }
+    ]
+  },
+  "work": [
+    {
+      "name": "SellAbroad",
+      "position": "Forward Deployed Engineer",
+      "location": "Remote",
+      "startDate": "2026-01",
+      "highlights": [
+        "Architected a 7-agent orchestration system that automates merchant onboarding end-to-end (live site analysis, validation, code integration, automated regression QA), with a persistent state layer that resumes on failure instead of losing data mid-run.",
+        "Designed and integrated REST/JSON APIs across a merchant-of-record cross-border payments platform, covering third-party integrations with Shopify, payment providers, and shipping carriers, with authentication, pagination, retry, and rate-limit handling.",
+        "Replaced static shipping rate tables with real-time carrier-calculated rates at checkout by consuming live carrier web services, improving pricing accuracy and removing manual per-merchant configuration.",
+        "Automated cross-border market expansion to 100+ countries with multi-currency pricing, geo-targeting logic, and a BNPL payment matrix, cutting per-merchant setup from hours to minutes.",
+        "Modeled relational schemas, indexes, and migrations in PostgreSQL, ran asynchronous job processing on Redis/BullMQ, and documented integration runbooks for repeatable handoff."
+      ],
+      "keywords": ["TypeScript", "Next.js", "React", "Node.js", "REST APIs", "Medusa", "Shopify APIs", "PostgreSQL", "Redis", "BullMQ", "Docker", "Git", "Linear"]
+    },
+    {
+      "name": "COOX",
+      "position": "Software Development Engineer",
+      "location": "Hybrid",
+      "startDate": "2025-04",
+      "endDate": "2025-10",
+      "highlights": [
+        "Built and shipped production UI features across web and mobile from a shared TypeScript codebase (React with Next.js on web, React Native on mobile), turning designs into reusable, responsive components inside a cross-functional product team.",
+        "Improved front-end responsiveness on key user flows by removing redundant React re-renders and consolidating duplicate API calls into batched, cached requests, cutting render and network overhead.",
+        "Owned production defect triage through Sentry: traced UI and API failures to root cause across environments, shipped fixes, and eliminated recurring error classes rather than patching symptoms."
+      ],
+      "keywords": ["React", "Next.js", "React Native", "TypeScript", "REST APIs", "HTML", "CSS", "Sentry", "Jira", "Git"]
+    }
+  ],
+  "education": [
+    { "studyType": "B.Tech", "area": "Information Technology", "institution": "Inderprastha Engg. College, AKTU", "startDate": "2020", "endDate": "2024" },
+    { "studyType": "12th Standard", "institution": "Kala Niketan Intl. School", "startDate": "2018", "endDate": "2020" },
+    { "studyType": "10th Standard", "institution": "Kala Niketan Intl. School", "startDate": "2017", "endDate": "2018" }
+  ],
+  "projects": [
+    {
+      "name": "Portfolio Studio",
+      "url": "https://studio.amankrverma.in/",
+      "description": "Shipped a portfolio builder end to end on Next.js, TypeScript, and Supabase, with OAuth sign-in, four art-directed, responsive themes behind a shared component registry, a Zod-validated REST export endpoint, and a Postgres schema with migrations and row-level security; the export pipeline inlines CSS, fonts, and images into one self-contained HTML file users can host anywhere."
+    },
+    {
+      "name": "Warden",
+      "url": "https://warden.amankrverma.in/",
+      "description": "Designed and shipped solo a local-first, read-only dashboard for everything an AI coding agent stores on a machine; hand-built monochrome design system with light and dark themes, a fully client-side demo that renders from a bundled JSON snapshot, on a zero-dependency Node.js core, live on Vercel."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Skills",
+      "keywords": [
+        "JavaScript", "TypeScript", "React", "React Hooks", "Next.js", "HTML5", "CSS3", "Tailwind CSS",
+        "Responsive UI Development", "State Management", "REST API Design & Integration",
+        "Web Performance Optimization (Core Web Vitals)", "Web Application Security", "Node.js", "Express",
+        "React Native", "Prisma", "PostgreSQL", "SQL", "MongoDB", "Redis", "JSON", "Postman", "Docker",
+        "Git/GitHub", "CI/CD", "Agile/Scrum", "Sentry", "Troubleshooting & Root-Cause Analysis", "Generative AI",
+        "LLM Integration (Gemini, OpenAI)", "RAG & Embeddings", "Multi-Agent Orchestration", "Technical Documentation"
+      ]
+    }
+  ],
+  "interests": [
+    { "name": "Football" },
+    { "name": "long walks" },
+    { "name": "photography" },
+    { "name": "building weekend side projects and taking them all the way to a live URL" }
+  ]
+}

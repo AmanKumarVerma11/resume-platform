@@ -1,0 +1,14 @@
+/* TeX Gyre Heros Condensed (GUST Font License), the font of the original LaTeX resume.
+   Converted from the CTAN .otf files to TrueType with fontTools (otf2ttf), because Chrome embeds
+   .otf (CFF) fonts in PDFs as Type 3 fonts, which resume parsers handle less reliably. */
+@font-face {
+  font-family: 'TeX Gyre Heros Cn';
+  font-weight: 400;
+  src: url('/fonts/texgyreheroscn-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'TeX Gyre Heros Cn';
+  font-weight: 700;
+  src: url('/fonts/texgyreheroscn-bold.ttf') format('truetype');
+}
