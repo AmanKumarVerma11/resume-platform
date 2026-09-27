@@ -1,0 +1,66 @@
+{
+  "basics": {
+    "name": "Alex Morgan",
+    "label": "Full-Stack Software Engineer | TypeScript, React, Node.js | APIs & Developer Tools",
+    "email": "alex@example.com",
+    "phone": "+1-555-0100",
+    "url": "https://alexmorgan.example.com/",
+    "summary": "Software engineer with 4 years of experience building web products end to end with **TypeScript**, **React** and **Node.js**. Enjoys turning vague requirements into small, well-tested services, making slow pages fast, and writing the docs the next person needs. Comfortable across the stack, from **PostgreSQL** schemas to CI pipelines.",
+    "profiles": [
+      { "network": "LinkedIn", "url": "https://example.com/in/alex-morgan" },
+      { "network": "GitHub", "url": "https://example.com/gh/alex-morgan" }
+    ]
+  },
+  "work": [
+    {
+      "name": "Example Corp",
+      "position": "Software Engineer",
+      "location": "Remote",
+      "startDate": "2023-02",
+      "highlights": [
+        "Led the rebuild of the customer dashboard in Next.js, cutting median page load from 3.1 s to 1.2 s.",
+        "Designed a REST API for partner integrations, with rate limiting, retries and versioned docs.",
+        "Added end-to-end tests to CI, catching regressions before release and halving hotfixes."
+      ],
+      "keywords": ["TypeScript", "Next.js", "React", "Node.js", "PostgreSQL", "Docker"]
+    },
+    {
+      "name": "Sample Labs",
+      "position": "Junior Developer",
+      "location": "Hybrid",
+      "startDate": "2021-06",
+      "endDate": "2023-01",
+      "highlights": [
+        "Built internal tools in React that replaced three spreadsheets used by the support team.",
+        "Maintained a Node.js service processing 2 million events a day and cut its cloud cost by 30%."
+      ],
+      "keywords": ["JavaScript", "React", "Node.js", "Redis", "AWS"]
+    }
+  ],
+  "education": [
+    {
+      "studyType": "B.Sc.",
+      "area": "Computer Science",
+      "institution": "Example State University",
+      "startDate": "2017",
+      "endDate": "2021"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Tiny Queue",
+      "url": "https://example.com/tiny-queue",
+      "description": "An open-source job queue for Node.js with retries, scheduling and a small web UI."
+    },
+    {
+      "name": "Budget Bot",
+      "url": "https://example.com/budget-bot",
+      "description": "A chat bot that categorises card transactions and sends a weekly spending summary."
+    }
+  ],
+  "skills": [
+    { "name": "Languages", "keywords": ["TypeScript", "JavaScript", "SQL", "Python"] },
+    { "name": "Tools", "keywords": ["React", "Next.js", "Node.js", "PostgreSQL", "Redis", "Docker", "GitHub Actions", "AWS"] }
+  ],
+  "interests": [{ "name": "Climbing" }, { "name": "open-source maintenance" }, { "name": "bread baking" }]
+}
