@@ -1,8 +1,3 @@
-const TIME_ZONE = 'Asia/Kolkata';
-
-export const formatDate = (date: Date) =>
-  date.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short', timeZone: TIME_ZONE });
-
 // Short "Browser · OS" label from a user-agent string.
 export function describeUserAgent(ua: string) {
   const os = /iPhone|iPad/.test(ua)

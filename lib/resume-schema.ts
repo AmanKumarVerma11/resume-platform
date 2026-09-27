@@ -3,6 +3,8 @@ import { z } from 'zod';
 // A subset of the JSON Resume schema (jsonresume.org), plus work[].keywords for the "Tech:" line.
 // basics.summary and work[].highlights accept **bold**.
 const date = z.string().regex(/^\d{4}(-(0[1-9]|1[0-2]))?$/, 'Use YYYY or YYYY-MM');
+// Only http(s) links, so a link on the page can't run script.
+const webUrl = z.url({ protocol: /^https?$/ });
 
 export const ResumeSchema = z.object({
   basics: z.object({
@@ -10,9 +12,9 @@ export const ResumeSchema = z.object({
     label: z.string(),
     email: z.email(),
     phone: z.string(),
-    url: z.url().optional(),
+    url: webUrl.optional(),
     summary: z.string(),
-    profiles: z.array(z.object({ network: z.string(), url: z.url() })),
+    profiles: z.array(z.object({ network: z.string(), url: webUrl })),
   }),
   work: z.array(
     z.object({
@@ -35,7 +37,7 @@ export const ResumeSchema = z.object({
       score: z.string().optional(),
     }),
   ),
-  projects: z.array(z.object({ name: z.string(), url: z.url(), description: z.string() })),
+  projects: z.array(z.object({ name: z.string(), url: webUrl, description: z.string() })),
   skills: z.array(z.object({ name: z.string(), keywords: z.array(z.string()) })),
   interests: z.array(z.object({ name: z.string() })),
 });

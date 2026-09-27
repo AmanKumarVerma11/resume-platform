@@ -1,40 +1,19 @@
 import Link from 'next/link';
-import { db, siteSettings, type EventType } from '@/lib/db';
+import { LocalTime } from '@/components/LocalTime';
+import { connectedApps, mcpUrl } from '@/lib/oauth';
 import { requireOwner } from '@/lib/owner';
-import { makePrimary, setActive } from './actions';
-import { formatDate } from './format';
-
-type Stat = { _id: { slug: string; type: EventType }; total: number; unique: number; last: Date };
+import { siteSettings } from '@/lib/settings';
+import { eventStats, listResumes } from '@/lib/stats';
+import { disconnectApps, makePrimary, setActive } from './actions';
 
 export default async function AdminPage() {
   await requireOwner();
-  const { versions, events } = await db();
-  const [resumes, stats, { primary, inactive }] = await Promise.all([
-    versions
-      .aggregate<{ _id: string; latest: number; publishedAt: Date }>([
-        { $project: { slug: 1, number: 1, createdAt: 1 } },
-        { $sort: { number: -1 } },
-        { $group: { _id: '$slug', latest: { $first: '$number' }, publishedAt: { $first: '$createdAt' } } },
-        { $sort: { _id: 1 } },
-      ])
-      .toArray(),
-    events
-      .aggregate<Stat>([
-        { $match: { isBot: false } },
-        {
-          $group: {
-            _id: { slug: '$slug', type: '$type' },
-            total: { $sum: 1 },
-            visitors: { $addToSet: '$visitorId' },
-            last: { $max: '$createdAt' },
-          },
-        },
-        { $project: { total: 1, unique: { $size: '$visitors' }, last: 1 } },
-      ])
-      .toArray(),
+  const [resumes, stat, { primary, inactive }, apps] = await Promise.all([
+    listResumes(),
+    eventStats(),
     siteSettings(),
+    connectedApps(),
   ]);
-  const stat = (slug: string, type: EventType) => stats.find((s) => s._id.slug === slug && s._id.type === type);
 
   return (
     <>
@@ -102,7 +81,7 @@ export default async function AdminPage() {
                         </div>
                       )}
                     </td>
-                    <td className="num" title={`Published ${formatDate(publishedAt)}`}>
+                    <td className="num" title={`Published ${publishedAt.toISOString().slice(0, 10)}`}>
                       v{latest}
                     </td>
                     <td className="num">{views?.total ?? 0}</td>
@@ -111,7 +90,7 @@ export default async function AdminPage() {
                     <td className="num">{downloads?.unique ?? 0}</td>
                     <td className="num">{stat(slug, 'print')?.total ?? 0}</td>
                     <td className="num">{stat(slug, 'click')?.total ?? 0}</td>
-                    <td>{views ? formatDate(views.last) : '–'}</td>
+                    <td>{views ? <LocalTime iso={views.last.toISOString()} /> : '–'}</td>
                   </tr>
                 );
               })}
@@ -123,6 +102,24 @@ export default async function AdminPage() {
         Your own visits and known bots are not counted. A visit counts as an open once the page has been on screen for
         3 seconds. Visitors and downloaders are counted once per browser (cookie).
       </p>
+
+      <h2>AI apps</h2>
+      <p>
+        Connect Claude, ChatGPT, Codex or any MCP app to <code>{mcpUrl()}</code> to create and edit resumes. Each app
+        asks you to approve it with your admin password.
+      </p>
+      {apps.length === 0 ? (
+        <p className="muted">No apps connected.</p>
+      ) : (
+        <>
+          <p>Connected: {apps.map((app) => app.clientName).join(', ')}</p>
+          <form action={disconnectApps}>
+            <button type="submit" className="secondary">
+              Disconnect all apps
+            </button>
+          </form>
+        </>
+      )}
     </>
   );
 }

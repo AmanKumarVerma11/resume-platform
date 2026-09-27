@@ -8,6 +8,7 @@ export type VersionDoc = {
   contentHash: string;
   pdf: Binary;
   note?: string;
+  source?: 'cli' | 'mcp'; // how it was published
   createdAt: Date;
 };
 
@@ -30,6 +31,28 @@ export type EventDoc = {
 // Site-wide choices made in /admin: which resume the bare domain shows, and which are switched off.
 export type SettingsDoc = { _id: 'site'; primary?: string; inactive?: string[] };
 
+// A resume waiting to be printed to PDF by the server (see renderWithSitePage). Lives for minutes.
+export type RenderJobDoc = { _id: string; slug: string; version: number; content: ResumeData; expiresAt: Date };
+
+// OAuth for the MCP endpoint. Codes and tokens are stored as SHA-256 hashes, never in plain text.
+export type OAuthClientDoc = { _id: string; clientName: string; redirectUris: string[]; createdAt: Date };
+export type OAuthCodeDoc = {
+  _id: string; // hash of the code
+  clientId: string;
+  redirectUri: string;
+  codeChallenge: string;
+  resource: string;
+  expiresAt: Date;
+};
+export type OAuthTokenDoc = {
+  _id: string; // hash of the token
+  kind: 'access' | 'refresh';
+  clientId: string;
+  resource: string;
+  expiresAt: Date;
+  createdAt: Date;
+};
+
 // One client per process, reused across hot reloads.
 const cache = globalThis as unknown as { mongo?: Promise<MongoClient> };
 
@@ -46,13 +69,11 @@ export async function db() {
     versions: database.collection<VersionDoc>('versions'),
     events: database.collection<EventDoc>('events'),
     settings: database.collection<SettingsDoc>('settings'),
+    renderJobs: database.collection<RenderJobDoc>('render_jobs'),
+    oauthClients: database.collection<OAuthClientDoc>('oauth_clients'),
+    oauthCodes: database.collection<OAuthCodeDoc>('oauth_codes'),
+    oauthTokens: database.collection<OAuthTokenDoc>('oauth_tokens'),
   };
-}
-
-export async function siteSettings() {
-  const { settings } = await db();
-  const doc = await settings.findOne({ _id: 'site' });
-  return { primary: doc?.primary ?? null, inactive: doc?.inactive ?? [] };
 }
 
 export async function closeDb() {

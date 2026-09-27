@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ResumeView, resumeMetadata } from '@/components/ResumeView';
-import { latestVersion, siteSettings } from '@/lib/db';
+import { latestVersion } from '@/lib/db';
+import { siteSettings } from '@/lib/settings';
 
 // The bare domain shows whichever resume is marked primary in /admin.
 export const dynamic = 'force-dynamic';

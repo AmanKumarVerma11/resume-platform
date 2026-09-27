@@ -84,6 +84,16 @@ body {
   color: #b00020;
 }
 
+.admin button.secondary {
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #151616;
+}
+
+.admin form.deny {
+  margin-top: 12px;
+}
+
 .admin .actions {
   display: flex;
   gap: 6px;

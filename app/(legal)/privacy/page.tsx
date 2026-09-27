@@ -1,17 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { siteOwner } from '@/lib/settings';
+import { baseUrl } from '@/lib/site';
 
 export const metadata: Metadata = { title: 'Privacy Policy' };
+export const dynamic = 'force-dynamic'; // the owner comes from the primary resume
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const owner = await siteOwner();
+  const site = new URL(baseUrl()).host;
   return (
     <>
       <h1>Privacy Policy</h1>
       <p className="updated">Last updated: 26 September 2026</p>
 
       <p>
-        This policy explains what information cv.amankrverma.in (&ldquo;the site&rdquo;, &ldquo;we&rdquo;,
-        &ldquo;us&rdquo;) collects when you visit it and how it is used. The site is operated by Aman Kumar Verma.
+        This policy explains what information {site} (&ldquo;the site&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;)
+        collects when you visit it and how it is used. The site is operated by {owner.name}.
       </p>
 
       <h2>Information we collect</h2>
@@ -47,8 +52,14 @@ export default function PrivacyPage() {
       <h2>Your choices</h2>
       <p>
         You can block or delete cookies in your browser settings; the site still works without them. To ask about, or
-        request deletion of, information collected about you, email{' '}
-        <a href="mailto:akverma11aug2002@gmail.com">akverma11aug2002@gmail.com</a>.
+        request deletion of, information collected about you,{' '}
+        {owner.email ? (
+          <>
+            email <a href={`mailto:${owner.email}`}>{owner.email}</a>.
+          </>
+        ) : (
+          'contact the site owner.'
+        )}
       </p>
 
       <h2>Changes</h2>

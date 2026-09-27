@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { baseUrl } from '@/lib/site';
 
 export const metadata: Metadata = { title: 'Cookie Policy' };
+export const dynamic = 'force-dynamic'; // reads the site address at request time
 
 export default function CookiesPage() {
   return (
@@ -10,8 +12,8 @@ export default function CookiesPage() {
       <p className="updated">Last updated: 26 September 2026</p>
 
       <p>
-        Cookies are small text files a website stores in your browser. cv.amankrverma.in stores the following, all set
-        by the site itself:
+        Cookies are small text files a website stores in your browser. {new URL(baseUrl()).host} stores the
+        following, all set by the site itself:
       </p>
 
       <table>

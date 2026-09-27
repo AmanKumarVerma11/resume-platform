@@ -1,4 +1,5 @@
-import { latestVersion, siteSettings } from '@/lib/db';
+import { latestVersion } from '@/lib/db';
+import { siteSettings } from '@/lib/settings';
 import { pdfResponse } from '@/lib/pdf-response';
 import { recordEvent } from '@/lib/tracking';
 

@@ -18,7 +18,25 @@ docker run -d --name resume-platform-mongo -p 127.0.0.1:27017:27017 mongo:7
 
 (MongoDB 8 images currently refuse to start on Docker Desktop's newer Linux kernel, see SERVER-121912.)
 
-## Edit and publish a resume
+## Edit resumes from an AI app (MCP)
+
+Connect Claude, ChatGPT, Codex or any MCP app to `https://cv.amankrverma.in/mcp`. The first time, the app sends you
+to a page on the site where you approve it with your admin password. `/admin` lists connected apps and can
+disconnect them all.
+
+- **Claude** (web, desktop, phone): add a custom connector with that address.
+- **Claude Code:** `claude mcp add --transport http resume https://cv.amankrverma.in/mcp`, then `/mcp` to sign in.
+- **Codex:** `codex mcp add resume --url https://cv.amankrverma.in/mcp`, then `codex mcp login resume`.
+- **ChatGPT:** turn on Developer mode (Settings → Security and login), then add the server as an app.
+
+The tools are `list_resumes`, `get_resume`, `list_versions`, `save_resume`, `set_primary`, `set_active` and
+`get_stats`. Saving generates the PDF on the server and the live page updates immediately. Every save is a new
+version, so you can always go back.
+
+Once a resume has been edited through an app, the database is ahead of `resumes/<slug>.json`, so the publish command
+below refuses to publish that file unless you add `--overwrite`.
+
+## Edit and publish a resume from a file
 
 Each resume is a JSON file in `resumes/`. The file name is the link: `resumes/se.json` is shared as
 `PUBLIC_BASE_URL/se`.

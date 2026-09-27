@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { ResumeView, resumeMetadata } from '@/components/ResumeView';
-import { latestVersion, siteSettings } from '@/lib/db';
+import { latestVersion } from '@/lib/db';
+import { siteSettings } from '@/lib/settings';
 
 // Always show the latest published version.
 export const dynamic = 'force-dynamic';

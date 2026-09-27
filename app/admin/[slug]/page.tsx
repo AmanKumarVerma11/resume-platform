@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db, type EventDoc } from '@/lib/db';
 import { requireOwner } from '@/lib/owner';
-import { describeUserAgent, formatDate } from '../format';
+import { LocalTime } from '@/components/LocalTime';
+import { describeUserAgent } from '@/lib/format';
 
 const LABELS: Record<EventDoc['type'], string> = {
   view: 'Opened',
@@ -45,7 +46,9 @@ export default async function ResumeStatsPage({ params }: { params: Promise<{ sl
             {history.map((v) => (
               <tr key={v.number}>
                 <td className="num">v{v.number}</td>
-                <td>{formatDate(v.createdAt)}</td>
+                <td>
+                  <LocalTime iso={v.createdAt.toISOString()} />
+                </td>
                 <td>{v.note ?? ''}</td>
                 <td>
                   <a href={`/admin/${slug}/${v.number}/pdf`}>Download</a>
@@ -75,7 +78,9 @@ export default async function ResumeStatsPage({ params }: { params: Promise<{ sl
             <tbody>
               {recent.map((e) => (
                 <tr key={e._id.toString()} className={e.isBot ? 'muted' : undefined}>
-                  <td>{formatDate(e.createdAt)}</td>
+                  <td>
+                    <LocalTime iso={e.createdAt.toISOString()} />
+                  </td>
                   <td>
                     {LABELS[e.type]}
                     {e.target && `: ${e.target}`} · v{e.version}
