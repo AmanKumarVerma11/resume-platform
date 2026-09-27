@@ -83,3 +83,21 @@ body {
 .admin .error {
   color: #b00020;
 }
+
+.admin .actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.admin .actions form {
+  display: block;
+}
+
+.admin td button {
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #151616;
+  font-size: 13px;
+}

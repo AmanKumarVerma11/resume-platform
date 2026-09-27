@@ -27,6 +27,9 @@ export type EventDoc = {
   createdAt: Date;
 };
 
+// Site-wide choices made in /admin: which resume the bare domain shows, and which are switched off.
+export type SettingsDoc = { _id: 'site'; primary?: string; inactive?: string[] };
+
 // One client per process, reused across hot reloads.
 const cache = globalThis as unknown as { mongo?: Promise<MongoClient> };
 
@@ -42,7 +45,14 @@ export async function db() {
   return {
     versions: database.collection<VersionDoc>('versions'),
     events: database.collection<EventDoc>('events'),
+    settings: database.collection<SettingsDoc>('settings'),
   };
+}
+
+export async function siteSettings() {
+  const { settings } = await db();
+  const doc = await settings.findOne({ _id: 'site' });
+  return { primary: doc?.primary ?? null, inactive: doc?.inactive ?? [] };
 }
 
 export async function closeDb() {

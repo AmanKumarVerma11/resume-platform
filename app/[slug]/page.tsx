@@ -1,12 +1,7 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { CookieNotice } from '@/components/CookieNotice';
-import { LegalLinks } from '@/components/LegalLinks';
-import { Resume } from '@/components/Resume';
-import { Tracker } from '@/components/Tracker';
-import { latestVersion } from '@/lib/db';
-import '@/styles/fonts.css';
-import '@/styles/resume.css';
+import { notFound, redirect } from 'next/navigation';
+import { ResumeView, resumeMetadata } from '@/components/ResumeView';
+import { latestVersion, siteSettings } from '@/lib/db';
 
 // Always show the latest published version.
 export const dynamic = 'force-dynamic';
@@ -14,32 +9,19 @@ export const dynamic = 'force-dynamic';
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const version = await latestVersion((await params).slug);
-  return {
-    title: version ? `${version.content.basics.name} – Resume` : 'Not found',
-    description: version?.content.basics.label,
-    robots: { index: false, follow: false },
-  };
+  return resumeMetadata(await latestVersion((await params).slug));
 }
 
 export default async function ResumePage({ params }: Props) {
   const { slug } = await params;
+  const { primary, inactive } = await siteSettings();
+  // A deactivated resume sends visitors to the primary one (shown on the bare domain).
+  if (inactive.includes(slug)) {
+    if (primary) redirect('/');
+    notFound();
+  }
+
   const version = await latestVersion(slug);
   if (!version) notFound();
-
-  return (
-    <main className="viewer">
-      <nav className="toolbar">
-        <a className="download" href={`/${slug}/pdf`}>
-          Download PDF
-        </a>
-      </nav>
-      <Resume data={version.content} />
-      <footer className="site-footer">
-        <LegalLinks />
-      </footer>
-      <CookieNotice />
-      <Tracker slug={slug} version={version.number} />
-    </main>
-  );
+  return <ResumeView version={version} />;
 }

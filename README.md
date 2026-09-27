@@ -49,6 +49,12 @@ from being counted, so sign in once on each device you use to check your link.
 
 `/admin/<slug>` lists every version (with its PDF) and recent activity with IP, location and device.
 
+In `/admin` you can also:
+
+- **Make primary**: that resume is shown on the bare domain (`cv.amankrverma.in`). Its own path keeps working too.
+- **Deactivate**: that resume's link (and its PDF link) redirects to the primary. Links inside PDFs you already sent
+  keep working. **Activate** turns it back on.
+
 Resume pages show a small cookie notice and link to `/privacy`, `/terms` and `/cookies`.
 
 ## Deploy (Vercel)

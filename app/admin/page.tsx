@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { db, type EventType } from '@/lib/db';
+import { db, siteSettings, type EventType } from '@/lib/db';
 import { requireOwner } from '@/lib/owner';
+import { makePrimary, setActive } from './actions';
 import { formatDate } from './format';
 
 type Stat = { _id: { slug: string; type: EventType }; total: number; unique: number; last: Date };
@@ -8,7 +9,7 @@ type Stat = { _id: { slug: string; type: EventType }; total: number; unique: num
 export default async function AdminPage() {
   await requireOwner();
   const { versions, events } = await db();
-  const [resumes, stats] = await Promise.all([
+  const [resumes, stats, { primary, inactive }] = await Promise.all([
     versions
       .aggregate<{ _id: string; latest: number; publishedAt: Date }>([
         { $project: { slug: 1, number: 1, createdAt: 1 } },
@@ -31,12 +32,22 @@ export default async function AdminPage() {
         { $project: { total: 1, unique: { $size: '$visitors' }, last: 1 } },
       ])
       .toArray(),
+    siteSettings(),
   ]);
   const stat = (slug: string, type: EventType) => stats.find((s) => s._id.slug === slug && s._id.type === type);
 
   return (
     <>
       <h1>Resumes</h1>
+      <p>
+        {primary ? (
+          <>
+            The bare domain (<a href="/">/</a>) shows <strong>{primary}</strong>, your primary resume.
+          </>
+        ) : (
+          'No primary resume yet, so the bare domain shows a 404. Make one primary below.'
+        )}
+      </p>
       {resumes.length === 0 ? (
         <p>
           No resumes yet. Publish one with <code>npm run publish-resume -- &lt;slug&gt;</code>.
@@ -48,6 +59,7 @@ export default async function AdminPage() {
               <tr>
                 <th>Resume</th>
                 <th>Share link</th>
+                <th>Status</th>
                 <th>Version</th>
                 <th>Opens</th>
                 <th>Visitors</th>
@@ -62,13 +74,33 @@ export default async function AdminPage() {
               {resumes.map(({ _id: slug, latest, publishedAt }) => {
                 const views = stat(slug, 'view');
                 const downloads = stat(slug, 'download');
+                const isPrimary = slug === primary;
+                const isActive = !inactive.includes(slug);
                 return (
-                  <tr key={slug}>
+                  <tr key={slug} className={isActive ? undefined : 'muted'}>
                     <td>
                       <Link href={`/admin/${slug}`}>{slug}</Link>
                     </td>
                     <td>
+                      {isPrimary && (
+                        <>
+                          <a href="/">/</a> and{' '}
+                        </>
+                      )}
                       <a href={`/${slug}`}>/{slug}</a>
+                    </td>
+                    <td>
+                      {isPrimary ? <strong>Primary</strong> : isActive ? 'Active' : 'Inactive (redirects to primary)'}
+                      {!isPrimary && (
+                        <div className="actions">
+                          <form action={makePrimary.bind(null, slug)}>
+                            <button type="submit">Make primary</button>
+                          </form>
+                          <form action={setActive.bind(null, slug, !isActive)}>
+                            <button type="submit">{isActive ? 'Deactivate' : 'Activate'}</button>
+                          </form>
+                        </div>
+                      )}
                     </td>
                     <td className="num" title={`Published ${formatDate(publishedAt)}`}>
                       v{latest}
