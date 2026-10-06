@@ -29,7 +29,8 @@ export default async function AdminPage() {
       </p>
       {resumes.length === 0 ? (
         <p>
-          No resumes yet. Publish one with <code>npm run publish-resume -- &lt;slug&gt;</code>.
+          No resumes yet. Create one from an AI app (below), or import a JSON file with{' '}
+          <code>npm run import-resume -- &lt;slug&gt; &lt;file.json&gt;</code>.
         </p>
       ) : (
         <div className="table-wrap">

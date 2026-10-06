@@ -2,7 +2,8 @@ import type { CallToolResult, McpServer } from '@modelcontextprotocol/server';
 import { z } from 'zod';
 import { db, latestVersion, type EventType } from './db';
 import { describeUserAgent } from './format';
-import { isValidSlug, publishVersion, renderWithSitePage } from './publish';
+import { pageOverflow } from './pdf';
+import { isValidSlug, publishVersion } from './publish';
 import { ResumeSchema } from './resume-schema';
 import { setActive, setPrimary, siteSettings } from './settings';
 import { baseUrl } from './site';
@@ -61,9 +62,7 @@ export function registerTools(server: McpServer) {
     },
     async ({ slug, version }) => {
       const { versions } = await db();
-      const doc = version
-        ? await versions.findOne({ slug, number: version }, { projection: { pdf: 0 } })
-        : await latestVersion(slug);
+      const doc = version ? await versions.findOne({ slug, number: version }) : await latestVersion(slug);
       if (!doc) return fail(`There is no resume "${slug}"${version ? ` version ${version}` : ''}. Use list_resumes.`);
       return ok({ slug, version: doc.number, publishedAt: doc.createdAt, note: doc.note, content: doc.content });
     },
@@ -92,10 +91,10 @@ export function registerTools(server: McpServer) {
     {
       title: 'Save a resume',
       description:
-        'Publish a new version of a resume, or create a new resume under a new name. The content is checked, a PDF ' +
-        'is generated, and the live page updates immediately; earlier versions are kept. Dates are "YYYY" or ' +
-        '"YYYY-MM". basics.summary and work[].highlights accept **bold**. A resume should fit on one page; the ' +
-        'result warns when it does not. Start from get_resume so nothing is lost.',
+        'Publish a new version of a resume, or create a new resume under a new name. The content is checked and ' +
+        'the live page updates immediately; earlier versions are kept, and the PDF is generated whenever someone ' +
+        'downloads it. Dates are "YYYY" or "YYYY-MM". basics.summary and work[].highlights accept **bold**. A ' +
+        'resume should fit on one page; the result warns when it does not. Start from get_resume so nothing is lost.',
       inputSchema: z.object({
         slug: Slug,
         content: ResumeSchema,
@@ -105,13 +104,15 @@ export function registerTools(server: McpServer) {
     },
     async ({ slug, content, note }) => {
       if (!isValidSlug(slug)) return fail(`"${slug}" can't be used as a name. Use lowercase letters, digits and dashes.`);
-      const result = await publishVersion({ slug, content, note, source: 'mcp', render: renderWithSitePage });
+      const result = await publishVersion({ slug, content, note, source: 'mcp' });
       if (result.status === 'unchanged') return ok({ message: `No changes since version ${result.version}.` });
+      const overflowPx = await pageOverflow(slug, result.version);
       return ok({
         message: `Published ${slug} version ${result.version}.`,
         link: `${baseUrl()}/${slug}`,
-        ...(result.overflowPx > 0 && {
-          warning: `The content is ${result.overflowPx}px taller than one page, so the PDF has 2 pages. Shorten it.`,
+        ...(overflowPx === null && { note: "Couldn't check the page length; open the link to see if it fits on one page." }),
+        ...(!!overflowPx && {
+          warning: `The content is ${overflowPx}px taller than one page, so the PDF has 2 pages. Shorten it.`,
         }),
       });
     },

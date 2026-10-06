@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "publish-resume": "tsx scripts/publish.ts"
+    "import-resume": "tsx scripts/import-resume.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "2.1.0",

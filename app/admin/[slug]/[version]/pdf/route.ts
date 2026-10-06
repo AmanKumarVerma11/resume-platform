@@ -1,9 +1,11 @@
 import { cookies } from 'next/headers';
 import { db } from '@/lib/db';
 import { isOwner, OWNER_COOKIE } from '@/lib/owner';
-import { pdfResponse } from '@/lib/pdf-response';
+import { pdfResponse } from '@/lib/pdf';
 
-// Any stored version's PDF, for you only. Not counted as a download.
+export const maxDuration = 60; // the PDF is printed by headless Chrome
+
+// Any version's PDF, for you only. Not counted as a download.
 export async function GET(_request: Request, { params }: { params: Promise<{ slug: string; version: string }> }) {
   if (!isOwner((await cookies()).get(OWNER_COOKIE)?.value)) return new Response('Unauthorized', { status: 401 });
 

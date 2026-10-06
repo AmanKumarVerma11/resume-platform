@@ -17,7 +17,7 @@ export default async function ResumeStatsPage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const { versions, events } = await db();
   const [history, recent] = await Promise.all([
-    versions.find({ slug }, { projection: { pdf: 0, content: 0 }, sort: { number: -1 } }).toArray(),
+    versions.find({ slug }, { projection: { content: 0 }, sort: { number: -1 } }).toArray(),
     events.find({ slug }, { sort: { createdAt: -1 }, limit: 100 }).toArray(),
   ]);
   if (history.length === 0) notFound();

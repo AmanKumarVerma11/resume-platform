@@ -1,9 +1,13 @@
 import type { NextConfig } from 'next';
 
+// The routes that print PDFs with headless Chrome. Its binary is loaded at runtime, so tracing can't find it.
+// Keys are globs, so brackets like [slug] can't be written literally: '/**/pdf' matches every PDF route.
+const chromium = ['./node_modules/@sparticuz/chromium/bin/**/*'];
+
 const nextConfig: NextConfig = {
-  // The Chromium binary the MCP endpoint prints PDFs with. It is loaded at runtime, so tracing can't find it.
   outputFileTracingIncludes: {
-    '/mcp': ['./node_modules/@sparticuz/chromium/bin/**/*'],
+    '/mcp': chromium,
+    '/**/pdf': chromium,
   },
 };
 

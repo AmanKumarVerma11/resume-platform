@@ -31,6 +31,13 @@ export const ownerToken = () => createHmac('sha256', adminPassword()).update('re
 
 export const isOwner = (cookieValue: string | undefined) => !!cookieValue && safeEqual(cookieValue, ownerToken());
 
+// Signs the internal link Chrome prints PDFs from, so old versions can't be read through it.
+export const renderSignature = (slug: string, version: number) =>
+  createHmac('sha256', adminPassword()).update(`render:${slug}:${version}`).digest('hex');
+
+export const isValidRenderSignature = (slug: string, version: number, signature: string | undefined) =>
+  !!signature && safeEqual(signature, renderSignature(slug, version));
+
 export async function requireOwner() {
   if (!isOwner((await cookies()).get(OWNER_COOKIE)?.value)) redirect('/admin/login');
 }

@@ -7,11 +7,11 @@ Share your resume as a link, see how often it's opened and downloaded, and edit 
 - **One link per resume** (`yoursite.com/se`, `yoursite.com/pm`, …) that always shows the latest version, with a
   Download PDF button. Mark one resume **primary** to show it on your home page, and **deactivate** old ones (their
   links redirect to the primary).
-- **Version history**: every publish is kept, with its PDF.
+- **Version history**: resumes live in the database, and every version's content is kept.
 - **Stats**: opens, unique visitors, downloads, prints and clicks on links inside the PDF, with IP address,
   approximate location and device. Your own visits and bots aren't counted.
-- **A real PDF**: rendered by headless Chrome from the same template as the page, with selectable text for applicant
-  tracking systems and tracked links.
+- **A real PDF, never stored**: each download is rendered by headless Chrome from the same template as the page, with
+  selectable text for applicant tracking systems and tracked links.
 - **Edit from AI apps**: a built-in [MCP](https://modelcontextprotocol.io) server with OAuth, so Claude, ChatGPT, Codex
   and other MCP apps can create and edit resumes.
 
@@ -42,7 +42,7 @@ cd resume-platform
 npm install
 cp .env.example .env.local   # then set ADMIN_PASSWORD and PUBLIC_BASE_URL=http://localhost:3000
 docker run -d --name resume-platform-mongo -p 127.0.0.1:27017:27017 mongo:7
-npm run publish-resume -- demo
+npm run import-resume -- demo examples/demo-resume.json
 npm run dev
 ```
 
@@ -52,22 +52,19 @@ Open http://localhost:3000/demo for the page and http://localhost:3000/admin for
 
 ## Your resume
 
-A resume is JSON in a subset of the [JSON Resume](https://jsonresume.org) format: see `resumes/demo.json` and
-`lib/resume-schema.ts`. Dates are `YYYY` or `YYYY-MM`, and `basics.summary` and `work[].highlights` accept `**bold**`.
+Resumes live only in the database, as versions of JSON in a subset of the [JSON Resume](https://jsonresume.org)
+format (`lib/resume-schema.ts`). Dates are `YYYY` or `YYYY-MM`, and `basics.summary` and `work[].highlights` accept
+`**bold**`. PDFs aren't stored: each download is rendered from the content.
 
-Either publish it from a file (your own `resumes/*.json` files are git-ignored):
+Create and edit resumes from an AI app (below). The name you give a resume is its link: `me` is shared as
+`yoursite.com/me`. To bring in an existing JSON file, such as `examples/demo-resume.json`, import it:
 
 ```bash
-npm run publish-resume -- me --note "what changed"
+npm run import-resume -- me path/to/resume.json --note "first version"
 ```
 
-or connect an AI app (below) and ask it to create or edit the resume. The file name, or the name you give the app,
-is the link: `me` is shared as `yoursite.com/me`.
-
-The publish command renders the PDF with your installed Chrome, skips publishing if nothing changed (`--force`
-re-renders anyway), warns if the resume no longer fits on one page, and reads settings from `.env.local` (or
-`--env <file>`, for example `.env.prod.local` to publish to production). If an AI app edited the resume last, it
-won't overwrite that with an older file unless you add `--overwrite`.
+The import only reads the file; nothing is kept in the project. It skips saving if nothing changed and reads settings
+from `.env.local`, or from `--env <file>` (for example `.env.prod.local` to import into production).
 
 ## Deploy (Vercel and MongoDB Atlas)
 
@@ -79,8 +76,8 @@ won't overwrite that with an older file unless you add `--overwrite`.
    - `ADMIN_PASSWORD`: a long random password
    - `PUBLIC_BASE_URL`: your site's address, for example `https://cv.example.com`
 3. Add your domain in the project's Settings → Domains.
-4. Publish your first resume, either with the publish command and `--env` pointing at your production settings, or
-   through an AI app, and make it primary in `/admin`.
+4. Create your first resume from an AI app, or import a JSON file with `--env` pointing at your production
+   settings, and make it primary in `/admin`.
 5. Sign in to `/admin` once on each device you use, so your own visits aren't counted.
 
 ## Edit from AI apps (MCP)
@@ -94,7 +91,7 @@ approve it with your admin password. `/admin` lists connected apps and can disco
 - **ChatGPT:** turn on Developer mode (Settings → Security and login), then add the server as an app.
 
 Tools: `list_resumes`, `get_resume`, `list_versions`, `save_resume`, `set_primary`, `set_active` and `get_stats`.
-Saving renders the PDF on the server and the page updates immediately.
+Saving updates the page immediately; the PDF is generated whenever someone downloads it.
 
 ## How stats are counted
 

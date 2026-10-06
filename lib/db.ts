@@ -1,14 +1,14 @@
-import { MongoClient, type Binary } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import type { ResumeData } from './resume-schema';
 
+// A published version of a resume. Only the content is stored; PDFs are rendered on demand.
 export type VersionDoc = {
   slug: string;
   number: number;
   content: ResumeData;
   contentHash: string;
-  pdf: Binary;
   note?: string;
-  source?: 'cli' | 'mcp'; // how it was published
+  source?: 'cli' | 'mcp'; // imported from a file, or saved by an AI app
   createdAt: Date;
 };
 
@@ -30,9 +30,6 @@ export type EventDoc = {
 
 // Site-wide choices made in /admin: which resume the bare domain shows, and which are switched off.
 export type SettingsDoc = { _id: 'site'; primary?: string; inactive?: string[] };
-
-// A resume waiting to be printed to PDF by the server (see renderWithSitePage). Lives for minutes.
-export type RenderJobDoc = { _id: string; slug: string; version: number; content: ResumeData; expiresAt: Date };
 
 // OAuth for the MCP endpoint. Codes and tokens are stored as SHA-256 hashes, never in plain text.
 export type OAuthClientDoc = { _id: string; clientName: string; redirectUris: string[]; createdAt: Date };
@@ -69,7 +66,6 @@ export async function db() {
     versions: database.collection<VersionDoc>('versions'),
     events: database.collection<EventDoc>('events'),
     settings: database.collection<SettingsDoc>('settings'),
-    renderJobs: database.collection<RenderJobDoc>('render_jobs'),
     oauthClients: database.collection<OAuthClientDoc>('oauth_clients'),
     oauthCodes: database.collection<OAuthCodeDoc>('oauth_codes'),
     oauthTokens: database.collection<OAuthTokenDoc>('oauth_tokens'),
@@ -80,7 +76,7 @@ export async function closeDb() {
   if (cache.mongo) await (await cache.mongo).close();
 }
 
-export async function latestVersion(slug: string, { withPdf = false } = {}) {
+export async function latestVersion(slug: string) {
   const { versions } = await db();
-  return versions.findOne({ slug }, { sort: { number: -1 }, projection: withPdf ? undefined : { pdf: 0 } });
+  return versions.findOne({ slug }, { sort: { number: -1 } });
 }
